@@ -1,6 +1,12 @@
-import React from 'react'
-
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 export default function Navbar() {
+
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const accessToken = localStorage.getItem('access_token'); // Replace 'access_token' with your actual token key
+    if (!accessToken) {
+        return "Kindly Login to access system";
+    }
     return (
         <nav className="navbar navbar-expand-lg bg-primary">
             <div className="container-fluid">
@@ -15,20 +21,18 @@ export default function Navbar() {
                         </li>
                         <li className="nav-item">
                             <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href="#">Roles</a></li>
-                                <li><a className="dropdown-item" href="#">Users</a></li>
-                                <li><a className="dropdown-item" href="#">Something else here</a></li>
+                                <li><Link to="/roles" className="dropdown-item" >Roles</Link></li>
+                                {/* <li><a className="dropdown-item" href="#">Users</a></li> */}
+                                {/* <li><a className="dropdown-item" href="#">Something else here</a></li> */}
                             </ul>
                         </li>
-                        {/* <li classNameName="nav-item">
-                            <a className="nav-link" href="#"></a>
-                        </li> */}
+
                     </ul>
-                    {/* <span className="navbar-text">
-                        Navbar text with an inline element
-                    </span> */}
+
                 </div>
             </div>
         </nav>
     )
 }
+
+

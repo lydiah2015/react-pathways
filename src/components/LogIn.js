@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import logo from "../logo.svg";
+// import RoleList from "./RoleList";
+// import { useHistory } from "react-router-dom";
 
 export default function LogIn() {
-    const [email, setEmail] = useState("");
+    const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    // const history = useHistory();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,7 +18,7 @@ export default function LogIn() {
             const response = await axios.post(
                 "https://registration.ghh.news:8888/real-estate/serviceController/login",
                 {
-                    email: email,
+                    username: username,
                     password: password,
                 },
                 {
@@ -29,6 +33,7 @@ export default function LogIn() {
                 setPassword("");
                 setError(null);
                 // Handle successful login here, e.g., redirect the user
+                // history.push("/roles");
             } else {
                 setError("Check your email/password");
             }
@@ -45,7 +50,7 @@ export default function LogIn() {
                 <form onSubmit={handleSubmit}>
                     {error && <div className="alert alert-danger">{error}</div>}
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">
+                        <label htmlFor="username" className="form-label">
                             Email
                         </label>
                         <input
@@ -53,7 +58,7 @@ export default function LogIn() {
                             name="email"
                             className="form-control"
                             aria-describedby="emailHelp"
-                            value={email}
+                            value={username}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
