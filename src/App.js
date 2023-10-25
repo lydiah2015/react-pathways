@@ -1,40 +1,25 @@
-// import LogIn from './components/LogIn'
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import RoleList from './components/RoleList';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <LogIn />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-// App.js
-import { Routes, Route } from 'react-router-dom';
+// import logo from './logo.svg';
+// import './App.css';
 import LogIn from './components/LogIn'
-import RoleList from './components/RoleList';
-import NavBar from './components/Navbar';
+import Dashboard from './components/Dashboard';
+import Roles from './components/Roles';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import Welcome from './components/Welcome';
 
-const App = () => {
+
+function App() {
   return (
-    <>
-      <NavBar />
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LogIn />} />
-        <Route path="/roles" element={<RoleList />} />
-        {/* <Route path="/about" element={<About />} /> */}
+        <Route path='/' element={<LogIn />} />
+        <Route path='/dashboard' element={<Dashboard />}>
+          <Route path='/dashboard' element={<Welcome />} />
+          <Route path='/dashboard/roles' element={<Roles />} />
+          <Route path='/dashboard/welcome' element={<Welcome />} />
+        </Route>
       </Routes>
-    </>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

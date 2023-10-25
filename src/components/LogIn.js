@@ -1,64 +1,68 @@
 import React, { useState } from "react";
-import axios from "axios"; // Import Axios
 import logo from "../logo.svg";
-// import RoleList from "./RoleList";
-// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LogIn() {
-    const [username, setEmail] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    // const history = useHistory();
+    const navigate = useNavigate();
 
+
+    var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+// fetch("https://registration.ghh.news:8888/real-estate/serviceController/login", requestOptions)
+//   .then(response => response.text())
+//   .then(result => console.log(result))
+//   .catch(error => console.log('error', error));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Email:", email); // Debug log
+        console.log("Password:", password); // Debug log
 
         try {
-            const response = await axios.post(
-                "https://registration.ghh.news:8888/real-estate/serviceController/login",
-                {
-                    username: username,
-                    password: password,
+            const response = await fetch("https://registration.ghh.news:8888/real-estate/serviceController/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+                redirect: 'follow',
+                body: JSON.stringify({
+                    username: email,
+                    password: password,
+                }),
+            });
 
             if (response.status === 200) {
-                setEmail("");
-                setPassword("");
-                setError(null);
-                // Handle successful login here, e.g., redirect the user
-                // history.push("/roles");
+                const data = await response.json();
+                console.log("RESPONSEEEEEEE ", data)
+                localStorage.setItem("accessKey", data?.accessKey)
+                navigate("/dashboard")
+                // Handle successful login here
             } else {
-                setError("Check your email/password");
+                console.log("Check your email/password");
             }
         } catch (err) {
             console.error(err);
-            setError("An error occurred. Please try again later.");
         }
     };
 
     return (
         <div>
-            <div className="card mx-auto p-2" style={{ width: 400, margin: 80 }}>
+            <div className="card mx-auto p-2 " style={{ width: 400, margin: 80 }}>
                 <img src={logo} className="card-img-top" alt="Logo" />
                 <form onSubmit={handleSubmit}>
-                    {error && <div className="alert alert-danger">{error}</div>}
                     <div className="mb-3">
-                        <label htmlFor="username" className="form-label">
-                            Email
+                        <label htmlFor="email" className="form-label">
+                            Username
                         </label>
                         <input
                             type="email"
-                            name="email"
+                            name="username"
                             className="form-control"
                             aria-describedby="emailHelp"
-                            value={username}
+                            value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
@@ -80,82 +84,10 @@ export default function LogIn() {
                         />
                     </div>
                     <button type="submit" className="btn btn-primary">
-                        Log In
+                        LogIn
                     </button>
                 </form>
             </div>
         </div>
     );
 }
-
-
-
-
-
-// import React, { useState } from 'react';
-
-// function LogIn() {
-//     const [formData, setFormData] = useState({ username: '', password: '' });
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-
-//         try {
-//             const response = await fetch('https://registration.ghh.news:8888/real-estate/serviceController/login', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify(formData),
-//             });
-
-//             if (response.status === 200) {
-//                 console.log('Login successful');
-//                 // You can add logic to handle a successful login here.
-//             } else {
-//                 console.log('Login failed');
-//                 // You can add logic to handle a failed login here.
-//             }
-//         } catch (error) {
-//             console.error('An error occurred:', error);
-//         }
-//     };
-
-//     const handleInputChange = (e) => {
-//         setFormData({ ...formData, [e.target.name]: e.target.value });
-//     };
-
-//     return (
-//         <div>
-//             <h2>Login</h2>
-//             <form onSubmit={handleSubmit}>
-//                 <div>
-//                     <label htmlFor="username">Username:</label>
-//                     <input
-//                         type="text"
-//                         id="username"
-//                         name="username"
-//                         value={formData.username}
-//                         onChange={handleInputChange}
-//                     />
-//                 </div>
-//                 <div>
-//                     <label htmlFor="password">Password:</label>
-//                     <input
-//                         type="password"
-//                         id="password"
-//                         name="password"
-//                         value={formData.password}
-//                         onChange={handleInputChange}
-//                     />
-//                 </div>
-//                 <div>
-//                     <button type="submit">Submit</button>
-//                 </div>
-//             </form>
-//         </div>
-//     );
-// }
-
-// export default LogIn;
-
